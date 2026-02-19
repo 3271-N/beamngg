@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeamNG Mod Merkezi | Profesyonel Mod Arşivi</title>
+    <style>
+        /* Genel Stil Ayarları */
+        :root {
+            --primary-color: #ff6600; /* BeamNG Turuncusu */
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Navigasyon Barı */
+        nav {
+            background-color: #000;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Bölümü */
+        .hero {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; }
+
+        /* Mod Sekmeleri */
+        .container {
+            padding: 40px 5%;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+        }
+
+        /* Mod Kartları (Grid Sistemi) */
+        .mod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .mod-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid #333;
+        }
+
+        .mod-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+        }
+
+        .mod-img {
+            width: 100%;
+            height: 180px;
+            background-color: #333;
+            object-fit: cover;
+        }
+
+        .mod-info {
+            padding: 20px;
+        }
+
+        .mod-info h3 { margin: 0 0 10px 0; }
+
+        .btn-download {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 40px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">BEAMNG MOD HUB</div>
+        <ul class="nav-links">
+            <li><a href="#">Anasayfa</a></li>
+            <li><a href="#arabalar">Arabalar</a></li>
+            <li><a href="#haritalar">Haritalar</a></li>
+            <li><a href="#egitimler">Kurulum</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>Sınırları Zorlayan Modlar</h1>
+        <p>En gerçekçi araçlar ve haritalar tek bir çatı altında.</p>
+    </header>
+
+    <main class="container">
+        <div class="tabs">
+            <button class="tab-btn active">Tümü</button>
+            <button class="tab-btn">Araçlar</button>
+            <button class="tab-btn">Haritalar</button>
+            <button class="tab-btn">UI Modları</button>
+        </div>
+
+        <div class="mod-grid">
+            <div class="mod-card">
+                <img src="https://via.placeholder.com/400x200" alt="Mod" class="mod-img">
+                <div class="mod-info">
+                    <h3>Ultra Realist Süspansiyon</h3>
+                    <p>Off-road araçları için optimize edilmiş yeni fizik motoru bileşeni.</p>
+                    <a href="#" class="btn-download">Modu İndir (.zip)</a>
+                </div>
+            </div>
+
+            <div class="mod-card">
+                <img src="https://via.placeholder.com/400x200" alt="Mod" class="mod-img">
+                <div class="mod-info">
+                    <h3>İstanbul Otoban Haritası</h3>
+                    <p>Gerçekçi tabelalar ve yüksek hız denemeleri için uzun yollar.</p>
+                    <a href="#" class="btn-download">Modu İndir (.zip)</a>
+                </div>
+            </div>
+
+            <div class="mod-card">
+                <img src="https://via.placeholder.com/400x200" alt="Mod" class="mod-img">
+                <div class="mod-info">
+                    <h3>E36 Drift Spec</h3>
+                    <p>Tamamen kişiselleştirilebilir, JBeam ayarlı drift efsanesi.</p>
+                    <a href="#" class="btn-download">Modu İndir (.zip)</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 BeamNG Mod Hub - Bu site bir hayran yapımıdır.</p>
+    </footer>
+
+</body>
+</html>
