@@ -2,81 +2,363 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>PORTFOLYA. | Canlı Editör</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault | Oyun İndirme Portalı</title>
+    
     <style>
-        body { background: #0b0e14; color: white; margin: 0; min-height: 100vh; }
-        .editor-header { background: #111827; border: 1px solid #1f2937; border-top-left-radius: 8px; border-top-right-radius: 8px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
-        .window-dot { width: 12px; height: 12px; border-radius: 50%; }
-        
-        /* Yükseklikler 400px'ten 75vh'ye (ekranın %75'i) çıkarıldı */
-        #editor { height: 75vh; min-height: 600px; }
-        #preview { width: 100%; height: 75vh; min-height: 600px; background: white; border: none; }
+        /* ==================== 1. GENEL AYARLAR VE TASARIM ==================== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #121212; /* Koyu oyuncu teması */
+            color: #ffffff; 
+        }
+
+        /* Üst Menü (Navbar) */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1.5rem 3rem; 
+            background-color: #1e1e1e; 
+            border-bottom: 2px solid #e50914; /* Kırmızı vurgu */
+        }
+
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            color: #e50914; 
+            letter-spacing: 2px; 
+        }
+
+        nav ul { 
+            list-style: none; 
+            display: flex; 
+            gap: 1.5rem; 
+        }
+
+        nav a { 
+            color: #b3b3b3; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem; 
+            border-radius: 4px;
+            transition: all 0.3s ease; 
+        }
+
+        nav a:hover, nav a.active { 
+            color: #fff; 
+            background-color: #e50914; 
+        }
+
+        /* Ana İçerik Alanı */
+        main { 
+            padding: 3rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        h1 { 
+            margin-bottom: 1rem; 
+            color: #e50914; 
+        }
+
+        p { 
+            color: #cccccc; 
+            line-height: 1.6; 
+        }
+
+        /* ==================== 2. SAYFA GEÇİŞ ANİMASYONLARI ==================== */
+        .page { 
+            display: none; /* Pasif sayfaları gizle */
+        }
+
+        .page.active { 
+            display: block; /* Aktif sayfayı göster */
+            animation: fadeSlideUp 0.5s forwards ease-out; 
+        }
+
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== 3. OYUN KARTLARI DÜZENİ ==================== */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: #e50914;
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.25);
+        }
+
+        .card-banner {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background-color: #2a2a2a;
+        }
+
+        .card-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #e50914;
+            font-weight: bold;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #e50914;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .category {
+            font-size: 0.75rem;
+            color: #e50914;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-body h2 {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Sistem Gereksinimleri Kutusu */
+        .sys-req {
+            background-color: #141414;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #e50914;
+            margin-bottom: 1.5rem;
+        }
+
+        .sys-req h4 {
+            font-size: 0.8rem;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+
+        .sys-req ul {
+            list-style: none;
+            font-size: 0.75rem;
+            color: #b3b3b3;
+        }
+
+        .sys-req li {
+            margin-bottom: 0.2rem;
+        }
+
+        .sys-req strong {
+            color: #dddddd;
+        }
+
+        /* Butonlar */
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .btn-download {
+            flex: 1;
+            text-align: center;
+            background-color: #e50914;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-download:hover {
+            background-color: #ff0f1a;
+            transform: scale(1.02);
+        }
+
+        .vt-link {
+            font-size: 0.75rem;
+            color: #888888;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .vt-link:hover {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Üst Navigasyon -->
-    <nav class="flex items-center justify-between p-6 border-b border-slate-800 bg-[#0b0e14]">
-        <div class="text-2xl font-black tracking-tighter text-blue-400">PORTFOLYA.</div>
-        <div class="flex gap-4 text-xl">
-            <span>🎨</span>
-            <span>⚙️</span>
-            <span>≡</span>
-        </div>
+    <!-- Üst Menü -->
+    <nav>
+        <div class="logo">GameVault</div>
+        <ul class="nav-links">
+            <li><a href="#" data-target="home" class="nav-link active">Ana Sayfa</a></li>
+            <li><a href="#" data-target="games" class="nav-link">Oyunlar</a></li>
+            <li><a href="#" data-target="contact" class="nav-link">İletişim</a></li>
+        </ul>
     </nav>
 
-    <!-- Ana Konteyner: Genişlik limiti max-w-6xl yerine max-w-[95%] yapılarak genişletildi -->
-    <main class="max-w-[98%] mx-auto py-8 px-4">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold mb-2">Canlı Kod Editörü</h1>
-            <p class="text-slate-400">HTML ve CSS kodlarınızı sol tarafa yazın, çıktısını sağ taraftaki köşede anında izleyin.</p>
-        </div>
+    <!-- Ana İçerik Alanı -->
+    <main id="content">
 
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- Sol: Kod Editörü -->
-            <div class="flex flex-col">
-                <div class="editor-header">
-                    <div class="flex items-center gap-2">
-                        <span class="text-slate-400">> index.html</span>
+        <!-- ANA SAYFA BÖLÜMÜ -->
+        <section id="home" class="page active">
+            <h1>Hoş Geldin Oyuncu!</h1>
+            <p>En iyi bağımsız oyunlar ve güncel modlar burada. Oynamak istediğin oyunu seç ve maceraya başla.</p>
+        </section>
+
+        <!-- OYUNLAR BÖLÜMÜ -->
+        <section id="games" class="page">
+            <h1>Oyun Kütüphanesi</h1>
+
+            <div class="game-grid">
+                
+                <!-- OYUN KARTI 1 -->
+                <div class="game-card">
+                    <div class="card-banner">
+                        <img src="https://picsum.photos/400/220?random=1" alt="Oyun Görseli">
+                        <span class="badge">15.2 GB</span>
                     </div>
-                    <div class="flex gap-2">
-                        <div class="window-dot bg-red-500"></div>
-                        <div class="window-dot bg-yellow-500"></div>
-                        <div class="window-dot bg-green-500"></div>
+                    <div class="card-body">
+                        <span class="category">Aksiyon / Açık Dünya</span>
+                        <h2>Cyber Quest 2077</h2>
+                        <p class="description">Geleceğin siber şehrinde hayatta kalma mücadelesi veren aksiyon dolu bir macera oyunu.</p>
+                        
+                        <div class="sys-req">
+                            <h4>Minimum Sistem Gereksinimleri:</h4>
+                            <ul>
+                                <li><strong>İşletim Sistemi:</strong> Windows 10 (64-bit)</li>
+                                <li><strong>İşlemci:</strong> Intel Core i5-4460 / AMD FX-6300</li>
+                                <li><strong>Bellek:</strong> 8 GB RAM</li>
+                                <li><strong>Ekran Kartı:</strong> NVIDIA GTX 960 (2 GB)</li>
+                            </ul>
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="https://drive.google.com" target="_blank" class="btn-download">💾 Oyunu İndir</a>
+                            <a href="https://virustotal.com" target="_blank" class="vt-link">🛡️ Virüs Taraması</a>
+                        </div>
                     </div>
                 </div>
-                <div id="editor" class="border-x border-b border-slate-800 rounded-b-lg overflow-hidden w-full"></div>
-            </div>
 
-            <!-- Sağ: Canlı Önizleme -->
-            <div class="flex flex-col">
-                <div class="editor-header bg-slate-900">
-                    <span class="text-slate-300 text-sm">◎ CANLI ÖNİZLEME KÖŞESİ</span>
+                <!-- OYUN KARTI 2 -->
+                <div class="game-card">
+                    <div class="card-banner">
+                        <img src="https://picsum.photos/400/220?random=2" alt="Oyun Görseli">
+                        <span class="badge">3.8 GB</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category">Yarış / Simülasyon</span>
+                        <h2>Speed Horizon Drift</h2>
+                        <p class="description">Gerçekçi araç fizikleri ve modifiye seçenekleriyle dolu sürükleyici yarış simülasyonu.</p>
+                        
+                        <div class="sys-req">
+                            <h4>Minimum Sistem Gereksinimleri:</h4>
+                            <ul>
+                                <li><strong>İşletim Sistemi:</strong> Windows 7 / 8.1 / 10</li>
+                                <li><strong>İşlemci:</strong> Intel Core i3-2100 / AMD FX-4100</li>
+                                <li><strong>Bellek:</strong> 4 GB RAM</li>
+                                <li><strong>Ekran Kartı:</strong> NVIDIA GT 730 / AMD HD 6570</li>
+                            </ul>
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="https://drive.google.com" target="_blank" class="btn-download">💾 Oyunu İndir</a>
+                            <a href="https://virustotal.com" target="_blank" class="vt-link">🛡️ Virüs Taraması</a>
+                        </div>
+                    </div>
                 </div>
-                <iframe id="preview" class="border-x border-b border-slate-800 rounded-b-lg w-full"></iframe>
+
             </div>
-        </div>
+        </section>
+
+        <!-- İLETİŞİM BÖLÜMÜ -->
+        <section id="contact" class="page">
+            <h1>Bize Ulaşın</h1>
+            <p>Bozuk linkleri veya eklenmesini istediğin oyunları buradan bildirebilirsin.</p>
+        </section>
+
     </main>
 
+    <!-- ==================== 4. SAYFA GEÇİŞ JAVASCRIPT KODU ==================== -->
     <script>
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
-        
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('editor'), {
-                value: "<h1>🚀 Sistem Hazır!</h1>\n<p>Sol taraftaki kutuya HTML yazarak burayı değiştirebilirsin.</p>\n\n<style>\n  h1 {\n    color: #3b82f6;\n    font-family: sans-serif;\n  }\n  p {\n    font-family: sans-serif;\n    font-size: 18px;\n  }\n</style>",
-                language: 'html',
-                theme: 'vs-dark',
-                automaticLayout: true
-            });
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
 
-            const update = () => {
-                const blob = new Blob([window.editor.getValue()], { type: 'text/html' });
-                document.getElementById('preview').src = URL.createObjectURL(blob);
-            };
-            window.editor.onDidChangeModelContent(update);
-            update();
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('data-target');
+
+                // Aktif menü butonunu değiştir
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                // Sayfaları gizle ve animasyonları sıfırla
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                    page.style.animation = 'none';
+                    page.offsetHeight; // Reflow hilesi
+                    page.style.animation = null;
+                });
+
+                // Hedef sayfayı animasyonla aç
+                document.getElementById(targetId).classList.add('active');
+            });
         });
     </script>
 </body>
